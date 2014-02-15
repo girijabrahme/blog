@@ -19,8 +19,11 @@ t_globals = {
 }
 render = web.template.render('templates', base='base', globals=t_globals)
 
+class base(object):
+  def __init__(self):
+    web.header('Content-Type', 'text/html; charset=utf-8')
 
-class Index:
+class Index(base):
 
     def GET(self):
         """ Show page """
@@ -28,7 +31,7 @@ class Index:
         return render.index(posts)
 
 
-class View:
+class View(base):
 
     def GET(self, id):
         """ View single post """
@@ -36,7 +39,7 @@ class View:
         return render.view(post)
 
 
-class New:
+class New(base):
 
     form = web.form.Form(
         web.form.Textbox('title', web.form.notnull,
@@ -60,14 +63,14 @@ class New:
         raise web.seeother('/')
 
 
-class Delete:
+class Delete(base):
 
     def POST(self, id):
         model.del_post(int(id))
         raise web.seeother('/')
 
 
-class Edit:
+class Edit(base):
 
     def GET(self, id):
         post = model.get_post(int(id))
